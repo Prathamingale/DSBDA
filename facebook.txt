@@ -1,0 +1,45 @@
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv("dataset_Facebook.csv", sep=";")
+
+df
+
+df.info()
+
+#data subsets
+a = df.iloc[:,:4]
+a.reset_index(inplace=True)
+a
+
+b = df.iloc[:,-4:]
+b.reset_index(inplace=True)
+b
+
+
+#Merge Data
+df_concat = pd.concat([a,b], axis=1)
+df_concat
+
+pd.merge(a,b, on='index')
+
+
+#Sort Data
+df_concat.sort_values("like", ascending=False)
+
+#Transpose data
+df_concat.iloc[:10,:].T
+
+df_concat.iloc[:1,:].T
+
+#data shape and reshape
+df.reset_index(inplace=True)
+
+df.head()
+
+pivot = df.pivot(index="index", columns=["Type"], values=["Lifetime Post Impressions by people who have liked your Page"])
+pivot
+
+
+pivot_table = pd.pivot_table(df,index=['Type'],columns=["Category"], values='like', aggfunc='mean')
+pivot_table

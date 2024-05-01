@@ -1,0 +1,130 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+df1 = pd.read_csv("heart.csv")
+df2 = pd.read_csv("airquality_data.csv",sep = ";", encoding='cp1252')
+
+df2.head()
+
+#datacleaning
+df1.info()
+
+df2.info()
+
+df2.isnull().sum()
+
+df1.isnull().sum()
+
+df2.drop(["Unnamed: 15","Unnamed: 16"],axis =1, inplace = True)
+
+df2.sample(10)
+
+df2.sample(10)
+
+df2.tail()
+
+df2.drop_duplicates()
+
+df1.drop_duplicates()
+
+df1.info()
+
+df2.info()
+
+#data Transformation
+df2.replace(",", ".", regex=True, inplace=True)
+
+df2.drop(["Date","Time"] ,axis =1 , inplace = True)
+
+df2.head()
+
+df2.dtypes
+
+df2 = df2.astype("float64")
+
+df2.dtypes
+
+df1.head()
+
+df1.Sex.replace(["M","F"],[1,0] , inplace =True)
+
+df1.ChestPainType.value_counts()
+
+df1.ChestPainType.replace(["ASY","NAP","ATA", "TA"],[0,1,2,3] ,inplace =True)
+
+df1.RestingECG.value_counts()
+
+df1.RestingECG.replace(["Normal","ST","LVH"],[0,1,2], inplace=True)
+
+df1.ExerciseAngina.value_counts()
+
+df1.ExerciseAngina.replace(["N","Y"],[0,1] , inplace =True)
+
+df1.ST_Slope.value_counts()
+
+df1.ST_Slope.replace(["Flat","Up","Down"],[0,1,2], inplace=True)
+
+df1.head()
+
+#data Integration
+
+df1.shape
+
+df2.shape
+
+final_df = pd.concat([df2.iloc[:800,:], df1.iloc[:800,:]], axis=1)
+final_df
+
+
+final_df.columns
+
+
+import seaborn as sns
+
+sns.pairplot(final_df.iloc[:,:5])
+
+import matplotlib.pyplot as plt
+plt.figure(figsize=(20,15))
+sns.heatmap(final_df.corr(), annot=True, cmap="magma")
+plt.show()
+
+#Model
+X = final_df.drop(["HeartDisease"] , axis =1 )
+y = final_df.HeartDisease
+
+
+X
+
+y
+
+Xtrain,Xtest,ytrain,ytest = train_test_split(X,y,test_size=0.2, random_state=7)
+
+model = LogisticRegression()
+model.fit(Xtrain, ytrain)
+
+
+final_pred=model.predict(Xtest)
+final_pred
+
+pd.DataFrame({"Actual":ytest, "Predict":final_pred})
+
+
+print("Accuracy of the Logistics Regression Model is ::",accuracy_score(ytest, final_pred)*100, "%")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
